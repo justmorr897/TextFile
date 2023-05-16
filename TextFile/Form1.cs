@@ -18,15 +18,18 @@ namespace TextFile
         #region colours
 
         //Create list to store strings from the file
+        List<string> colourList;
 
         private void loadColoursButton_Click(object sender, EventArgs e)
         {
-            
+            colourList = File.ReadAllLines("Colours.txt").ToList();
+
             DisplayColours();
         }
 
         private void saveColoursButton_Click(object sender, EventArgs e)
         {
+            File.WriteAllLines("Colours.txt", colourList);
         }
 
         private void sortColoursButton_Click(object sender, EventArgs e)
@@ -36,7 +39,10 @@ namespace TextFile
 
         private void addColourButton_Click(object sender, EventArgs e)
         {
+            string newColour = colourInput.Text;
+            colourList.Add(newColour);
 
+            DisplayColours();
         }
 
         private void removeButton_Click(object sender, EventArgs e)
@@ -48,10 +54,10 @@ namespace TextFile
         {
             colourOutput.Text = "";
 
-            //foreach(string colour in colours)
-            //{
-            //    colourOutput.Text += $"{colour}\n";
-            //}
+            foreach (string colour in colourList)
+            {
+                colourOutput.Text += $"{colour}\n";
+            }
         }
 
         #endregion
@@ -60,9 +66,21 @@ namespace TextFile
         #region scores
 
         //Create a list to hold HighScore objects
+        List<HighScorecs> scores = new List<HighScorecs>();
 
         private void loadScoresButton_Click(object sender, EventArgs e)
         {
+            List<string> scoreList = File.ReadAllLines("scoreFile.txt").ToList();
+
+            for(int i = 0; i < scoreList.Count; i += 2)
+            {
+                string name = scoreList[i];
+                int score = Convert.ToInt32((scoreList[i+ 1]));
+
+                HighScorecs hs = new HighScorecs(name, score);
+                scores.Add(hs);
+            }
+            
             DisplayScores();
         }
 
@@ -78,7 +96,13 @@ namespace TextFile
 
         private void addScoreButton_Click(object sender, EventArgs e)
         {
+            string name = nameInput.Text;
+            int score = Convert.ToInt32((scoreInput.Text));
 
+            HighScorecs hs = new HighScorecs(name, score);
+            scores.Add(hs);
+
+            DisplayScores();
         }
 
         private void removeScoresButton_Click(object sender, EventArgs e)
@@ -90,10 +114,10 @@ namespace TextFile
         {
             scoreOutput.Text = "";
 
-            //foreach (HighScore hs in scores)
-            //{
-            //    scoreOutput.Text += $"{hs.name} {hs.score}\n";
-            //}
+            foreach (HighScorecs hs in scores)
+            {
+                scoreOutput.Text += $"{hs.name} {hs.score}\n";
+            }
         }
 
         #endregion
